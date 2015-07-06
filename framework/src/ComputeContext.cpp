@@ -1,5 +1,7 @@
 #include "ComputeContext.h"
+#ifdef OCLS_USE_VIS
 #include "RenderContext.h"
+#endif
 #include <iostream>
 #include <sstream>
 #include <Utility.h>
@@ -71,6 +73,7 @@ ComputeContext::ComputeContext(RenderContext* rendercontext, DeviceType type) {
     int minor = std::atoi(&v_str[9]);
     m_cl_version = (major * 100) + (minor * 10);
 
+#ifdef OCLS_USE_VIS
     if(rendercontext != NULL && rendercontext->isContextValid() &&
             (isExtensionAvailable("cl_khr_gl_sharing") || isExtensionAvailable("cl_APPLE_gl_sharing"))) {
         m_share_context = true;
@@ -113,6 +116,20 @@ ComputeContext::ComputeContext(RenderContext* rendercontext, DeviceType type) {
         m_context = clCreateContext(properties, 1, &m_device, context_error_callback, NULL, &err);
         CHECK_CL_ERROR(err);
     }
+#else
+    m_render_interoperability = false;
+
+    logger->log(Logger::WARNING, "Shared OpenCL/OpenGL context not supported. Recompile with -DOCLS_USE_VIS to enable.");
+
+    m_share_context = false;
+    cl_context_properties properties[] = {
+            CL_CONTEXT_PLATFORM, (cl_context_properties) m_platform,
+            0, 0,
+    };
+
+    m_context = clCreateContext(properties, 1, &m_device, context_error_callback, NULL, &err);
+    CHECK_CL_ERROR(err);
+#endif
 
     m_queue = clCreateCommandQueue(m_context, m_device, CL_QUEUE_PROFILING_ENABLE, &err);
     CHECK_CL_ERROR(err);

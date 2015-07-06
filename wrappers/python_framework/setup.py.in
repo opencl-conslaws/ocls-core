@@ -3,29 +3,18 @@ import os
 import numpy
 
 module = Extension('_ocls_framework_swig',
-                    include_dirs = ['${PYTHON_FRAMEWORK_INTERFACE_DIR}',
-                                    '${C_FRAMEWORK_INCLUDE_DIR}',
+                    include_dirs = ['${OCLS_PYTHON_INTERFACE_DIR}',
+                                    '${OCLS_C_INCLUDE_DIR}',
                                     numpy.get_include()],
                     extra_link_args=['-Wl,${RPATH}'],
                     library_dirs = ['${LIBRARY_OUTPUT_PATH}'],
-                    libraries=['${C_FRAMEWORK_STATIC_LIBRARIES}${POSTFIX}'],
-                    sources = ['${PYTHON_FRAMEWORK_INTERFACE_DIR}/framework_interface_wrap.c'])
-
-module0 = Extension('visualizer._ocls_visualizer_swig',
-                    include_dirs = ['${PYTHON_FRAMEWORK_INTERFACE_DIR}',
-                                    '${C_FRAMEWORK_INCLUDE_DIR}',
-                                    '${C_VISUALIZER_INCLUDE_DIR}',
-                                    numpy.get_include()],
-                    extra_link_args=['-Wl,${RPATH}'],
-                    library_dirs = ['${LIBRARY_OUTPUT_PATH}'],
-                    libraries=['${C_FRAMEWORK_STATIC_LIBRARIES}${POSTFIX}',
-                                '${C_VISUALIZER_LIBRARIES}${POSTFIX}'],
-                    sources = ['${PYTHON_FRAMEWORK_INTERFACE_DIR}/visualizer_interface_wrap.c'])
+                    libraries=['${OCLS_C_STATIC_LIBRARIES}${POSTFIX}'],
+                    sources = ['${OCLS_PYTHON_INTERFACE_DIR}/framework_interface_wrap.c'])
 
 setup (name = 'ocls Framework',
        version = '1.0',
        description = '',
-       packages=['ocls_framework', 'ocls_framework.tests', 'ocls_framework.functions', 'ocls_framework.compiler', 'ocls_framework.analyser', 'ocls_framework.visualizer'],
+       packages=['ocls_framework', 'ocls_framework.tests', 'ocls_framework.functions', 'ocls_framework.compiler', 'ocls_framework.analyser'],
        package_dir = {'': '${CMAKE_CURRENT_SOURCE_DIR}/src/'},
        ext_package='ocls_framework',
-       ext_modules = [module, module0])
+       ext_modules = [module])

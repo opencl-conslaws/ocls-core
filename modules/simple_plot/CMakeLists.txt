@@ -8,13 +8,13 @@ IF(NOT LIBRARY_OUTPUT_PATH)
 	SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 ENDIF(NOT LIBRARY_OUTPUT_PATH)
 
-FIND_PATH(FRAMEWORK_INCLUDE_DIR NAMES Framework.h DOC "Path to directory where framework.h can be found")
-FIND_LIBRARY(FRAMEWORK_LIBRARIES NAMES Framework.lib Framework.so DOC "Path to directory where framework libraries can be found")
+FIND_PATH(OCLS_INCLUDE_DIR NAMES Framework.h DOC "Path to directory where framework.h can be found")
+FIND_LIBRARY(OCLS_LIBRARIES NAMES Framework.lib Framework.so DOC "Path to directory where framework libraries can be found")
 
 SET(SIMPLE_PLOT_INCLUDE_DIR "${MODULE_DIR}/simple_plot/include" CACHE PATH " ")
 
 INCLUDE_DIRECTORIES(
-	${FRAMEWORK_INCLUDE_DIR}
+	${OCLS_INCLUDE_DIR}
 	${SIMPLE_PLOT_INCLUDE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR})
 
@@ -34,7 +34,7 @@ FOREACH(filename ${simple_plot_vglsl})
 ENDFOREACH(filename ${simple_plot_vglsl})
 
 LINK_DIRECTORIES(
-	${FRAMEWORK_LIB_DIR})
+	${OCLS_LIB_DIR})
 
 FILE(GLOB SIMPLE_PLOT_SRC "src/*.cpp")
 ADD_LIBRARY (SimplePlot STATIC ${SIMPLE_PLOT_SRC} ${glsl_srcs})

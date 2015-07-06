@@ -5,14 +5,14 @@ IF(NOT LIBRARY_OUTPUT_PATH)
 	SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 ENDIF(NOT LIBRARY_OUTPUT_PATH)
 
-FIND_PATH(FRAMEWORK_INCLUDE_DIR NAMES Framework.h DOC "Path to directory where framework.h can be found")
+FIND_PATH(OCLS_INCLUDE_DIR NAMES Framework.h DOC "Path to directory where framework.h can be found")
 
-FIND_LIBRARY(FRAMEWORK_STATIC_LIBRARIES NAMES Framework.obj Framework.a DOC "Path to directory where framework libraries can be found")
-FIND_LIBRARY(FRAMEWORK_LIBRARIES NAMES Framework.lib Framework.so DOC "Path to directory where framework libraries can be found")
+FIND_LIBRARY(OCLS_STATIC_LIBRARIES NAMES Framework.obj Framework.a DOC "Path to directory where framework libraries can be found")
+FIND_LIBRARY(OCLS_LIBRARIES NAMES Framework.lib Framework.so DOC "Path to directory where framework libraries can be found")
 
-FIND_PATH(C_FRAMEWORK_INCLUDE_DIR NAMES cframework.h DOC "Path to directory where framework.h can be found")
-FIND_LIBRARY(C_FRAMEWORK_LIBRARIES NAMES CFramework.lib CFramework.so DOC "Path to directory where framework libraries can be found")
-FIND_LIBRARY(C_FRAMEWORK_STATIC_LIBRARIES NAMES CFramework.obj CFrameworkd.obj CFramework.a CFrameworkd.a DOC "Path to directory where framework libraries can be found")
+FIND_PATH(OCLS_C_INCLUDE_DIR NAMES cframework.h DOC "Path to directory where framework.h can be found")
+FIND_LIBRARY(OCLS_C_LIBRARIES NAMES CFramework.lib CFramework.so DOC "Path to directory where framework libraries can be found")
+FIND_LIBRARY(OCLS_C_STATIC_LIBRARIES NAMES CFramework.obj CFrameworkd.obj CFramework.a CFrameworkd.a DOC "Path to directory where framework libraries can be found")
 
 FIND_PATH(SIMPLE_PLOT_INCLUDE_DIR NAMES SimplePlotModule.h DOC "Path to directory where SimplePlotModule.h can be found")
 
@@ -34,26 +34,26 @@ SET(C_VISUALIZER_INCLUDE_DIR "${WRAPPER_DIR}/c_visualizer/include" CACHE PATH " 
 
 INCLUDE_DIRECTORIES(
 	${C_VISUALIZER_INCLUDE_DIR}
-    ${FRAMEWORK_INCLUDE_DIR}
-    ${C_FRAMEWORK_INCLUDE_DIR}
+    ${OCLS_INCLUDE_DIR}
+    ${OCLS_C_INCLUDE_DIR}
     ${SIMPLE_PLOT_INCLUDE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR})
 
 LINK_DIRECTORIES(
-	${FRAMEWORK_LIB_DIR}
+	${OCLS_LIB_DIR}
 	${MODULE_LIB_DIR})
 
 FILE(GLOB C_VISUALIZER_SRC "src/*.cpp")
 ADD_LIBRARY (CVisualizer SHARED ${C_VISUALIZER_SRC})
 TARGET_LINK_LIBRARIES(CVisualizer
-	${FRAMEWORK_STATIC_LIBRARIES}_s
+	${OCLS_STATIC_LIBRARIES}_s
 	${SIMPLE_PLOT_LIBRARIES})
 SET_TARGET_PROPERTIES(CVisualizer PROPERTIES DEBUG_POSTFIX "d")
 INSTALL(TARGETS CVisualizer DESTINATION framework/lib)
 
 ADD_LIBRARY (CVisualizer_s STATIC ${C_VISUALIZER_SRC})
 TARGET_LINK_LIBRARIES(CVisualizer_s
-	${FRAMEWORK_STATIC_LIBRARIES}_s
+	${OCLS_STATIC_LIBRARIES}_s
 	${SIMPLE_PLOT_LIBRARIES})
 SET_TARGET_PROPERTIES(CVisualizer_s PROPERTIES OUTPUT_NAME CVisualizer)
 SET_TARGET_PROPERTIES(CVisualizer_s PROPERTIES DEBUG_POSTFIX "d")

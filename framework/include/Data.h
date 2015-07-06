@@ -2,7 +2,11 @@
 #define DATA_H
 
 #include "Domain.h"
+#ifdef OCLS_USE_VIS
 #include "RenderContext.h"
+#else
+typedef int GLuint;
+#endif
 #include "ComputeContext.h"
 #include "Program.h"
 #include "Logger.h"

@@ -1,3 +1,5 @@
+#ifdef OCLS_USE_VIS
+
 #include "RenderContext.h"
 #include <sstream>
 #include <iomanip>
@@ -443,3 +445,6 @@ std::thread::id RenderWindow::getRenderThreadID() {
     return m_render_thread.get_id();
 }
 }
+
+
+#endif //OCLS_USE_VIS

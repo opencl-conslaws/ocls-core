@@ -9,7 +9,10 @@
 #define GLEW_MX
 #endif
 
+#ifdef OCLS_USE_VIS
 #include <GL/glew.h>
+#endif
+
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else

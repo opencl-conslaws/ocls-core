@@ -1,6 +1,7 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <limits>
 
 #ifdef __APPLE__
 #include <OpenCL/cl_platform.h>

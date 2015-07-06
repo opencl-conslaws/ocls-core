@@ -10,7 +10,9 @@
 
 #include "Utility.h"
 #include "Module.h"
+#ifdef OCLS_USE_VIS
 #include "RenderContext.h"
+#endif
 #include "ComputeContext.h"
 #include "DataManager.h"
 #include "Domain.h"

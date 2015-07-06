@@ -51,12 +51,14 @@ Data::~Data(){
     CHECK_CL_ERROR(clReleaseMemObject(m_buffer));
     CHECK_CL_ERROR(clReleaseMemObject(m_unpadded_buffer));
 
+#ifdef OCLS_USE_VIS
     if(m_compute_context->usingRenderInteroperability()){
         if (m_image != NULL) {
             CHECK_CL_ERROR(clReleaseMemObject(m_image));
         }
         glDeleteTextures(1, &m_texture);
     }
+#endif
 }
 
 
@@ -153,6 +155,7 @@ void Data::copyToTexture(){
     }
 
     cl_int err;
+#ifdef OCLS_USE_VIS
     if(m_compute_context->usingSharedContext()) {
         if(m_dim == 3 && (m_image == NULL)){
             //logger->log(Logger::ERROR, "The extension 'cl_khr_3d_image_writes' is required to write 3D data to textures in kernel, "
@@ -214,10 +217,15 @@ void Data::copyToTexture(){
         logger->log(Logger::ERROR, "Shared Context is required for visualization, "
                 "Fallback is not yet implemented.");
     }
+#else
+    logger->log(Logger::ERROR, "Shared Context is required for visualization, "
+            "but has been disabled during build.");
+#endif
     m_need_texture = false;
 }
 
 void Data::createImage(){
+#ifdef OCLS_USE_VIS
     if(!m_compute_context->usingRenderInteroperability()){
         return;
     }
@@ -293,6 +301,7 @@ texture_target: GL_TEXTURE_{1D, 2D}[_ARRAY],
 #endif
 
     m_need_texture = true;
+#endif // OCLS_USE_VIS
 }
 void Data::createBuffer(){
     cl_int err = CL_SUCCESS;

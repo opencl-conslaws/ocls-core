@@ -1,7 +1,7 @@
 #include "Framework.h"
 #include "KernelResources.h"
 
-#define BUILD_WITH_RENDER_CONTEXT
+//#define OCLS_USE_VIS
 
 namespace ocls {
 
@@ -15,7 +15,7 @@ Framework::Framework(DeviceType type, Logger::Level log_level){
     logger = m_logger;
     logger->log(Logger::DEBUG, "Initializing Framework");
 
-#ifdef BUILD_WITH_RENDER_CONTEXT
+#ifdef OCLS_USE_VIS
 	m_render_context = new RenderContext();
 #else
     m_render_context = NULL;
@@ -42,7 +42,7 @@ Framework::Framework(DeviceType type, Logger::Level log_level){
 
 Framework::~Framework(){
     logger->log(Logger::DEBUG, "Destroying Framework");
-#ifdef BUILD_WITH_RENDER_CONTEXT
+#ifdef OCLS_USE_VIS
     delete m_render_context; // < Application will wait until all windows are closed
 #endif
     std::map<std::string, Module*>::iterator it;
