@@ -1,0 +1,6 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(OpenConservSolver)
+
+ADD_SUBDIRECTORY(c_framework)
+ADD_SUBDIRECTORY(c_visualizer)
+ADD_SUBDIRECTORY(python_framework)

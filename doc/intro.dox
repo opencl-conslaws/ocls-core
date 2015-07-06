@@ -1,0 +1,347 @@
+/*! \mainpage Index Page
+ *
+ * \section intro_sec Introduction
+ *
+ * Write something here
+ * \tableofcontents
+ *
+ * \section build_sec Build Framework
+ *
+ * \subsection c11 Note About C++11
+   At the moment the framework requires C++11 and the compiler argument 'std=c++11' is enabled by default. Fallback to support
+   older compilers are planned. The C++11 featues currently required are:
+
+   -   [Thread support library] (http://en.cppreference.com/w/cpp/thread)
+   -   [Variadic Templates / Parameter Packs] (http://en.cppreference.com/w/cpp/language/parameter_pack)
+   -   [Functional Objects] (http://en.cppreference.com/w/cpp/utility/functional)
+
+   Please check if your compiler supports these features: [Compiler status](http://en.cppreference.com/w/cpp/compiler_support).
+
+   Tested:
+
+   -   GCC 4.8.2 (Linux)
+   -   Clang++ 3.3 (OSx Xcode 5.0)
+   -   Clang++ 3.2 (Linux)
+
+   Untested but should work:
+
+   -   GCC 4.3.*
+   -   Clang 2.9
+   -   Microsoft Visual Studio 2013 (MSVC12)
+ *
+ * \subsection depend Framework Dependencies:
+ * 1. OpenCL 
+ * 2. [GLEW (OpenGL Extension Wrangler Library)](http://glew.sourceforge.net/)
+ * 3. [GLFW3 (OpenGL Window Manager Library)](http://www.glfw.org/)
+ * 4. [GLM (OpenGL Mathematics)](http://glm.g-truc.net/0.9.5/index.html)
+ * 5. [Boost Test](http://www.boost.org/doc/libs/1_44_0/libs/test/doc/html/index.html)
+ *
+ * \subsection linux Linux (Ubuntu)
+ * GLEW, GLM and Boost Test can be installed from apt-get, simply copy this command into your terminal:
+ * \code{.sh}
+ * sudo apt-get install build-essential xorg-dev libboost-filesystem-dev libboost-system-dev libboost-test-dev libglew-dev libglewmx-dev libglm-dev cmake
+ * \endcode
+ * At the moment for writing, only GLFW2 is available through Ubuntu package distribution and we need
+GLFW3. We must then instead download the latest version from GitHub. These commands will download the
+latest version of GLFW, build it and install it.
+ * \code{.sh}
+ * git clone git@github.com:glfw/glfw.git &&
+ * mkdir glfw/build &&
+ * cd glfw/build &&
+ * cmake .. &&
+ * sudo make install 
+ * \endcode
+ * 
+ *
+ * Installing OpenCL libraries depends on what OpenCL capable device you want to run the framework on.
+ *
+ * - Intel CPUs, Integrated GPUs and Xeon Phi:
+    - https://software.intel.com/en-us/articles/opencl-drivers
+ * - AMD GPUs
+    - OpenCL are distributed through the latest Catalyst Drivers http://support.amd.com/en-us/download
+ * - AMD CPUs and APUs
+    - http://support.amd.com/en-us/download
+ * - Nvidia
+    - OpenCL are distributed though the CUDA drivers https://developer.nvidia.com/cuda-downloads
+ * \subsubsection build Building with CMake
+ * 1. Clone the project to a desired location
+ * 2. Create a build folder [Optional]
+ * 3. ```cmake [path to project folder]```
+ * 4. ```make all```
+ *
+ * \section getting_started_sec Getting Started
+In order to use the framework we start with creating an instance of the ocls::Framework object,
+\code{.cpp}
+#include "Framework.h"
+int main(){
+	// Create an insance of the framework.
+	ocls::Framework framework;
+ 	
+	// ...	
+	return 0; 
+}
+\endcode
+
+\subsection domain Define a Domain
+The ocls::Framework object is your entry point for interacting with every part of the framework. The next thing is to specify our domain, we do this by creating a ocls::Domain object.
+\code{.cpp}
+// Create a new 1D domain
+ocls::Domain domain(1);
+
+// Set the mesh refinement to 200 cells
+domain.setMesh(200)
+
+// Set the physical bounds of the domain (values at edge cells.)
+domain.setBounds(-1.0f,1.0f); 
+
+// Set the number of ghost cell our algorithm requires.
+domain.setGhostCells(1);
+\endcode
+
+\subsection create_data Creating Data Set
+With a domain defined we can create a dataset to store the results of our computations.
+\code{.cpp}
+// Create a new data set with reference name 'q'
+ocls::Data* q = framework.createData(domain, "q");
+\endcode
+A new dataset will by default be zero initialized. If this is not desired we can use a function to populate it
+\code{.cpp}
+// Some function
+std::string str = "float foo(){" \
+			"return 1.0f;" \
+			"}";
+
+// Load and parse the source
+ocls::CLSSource* source = framework.getSourceLoader().loadFromString(str);
+
+// Create dataset and run function 'foo' on every cell
+ocls::Data* q = framework.createData(domain, "q", source->getFunction("foo"));
+\endcode
+Keeping functions in strings are not very tidy so you can keep them in an external file and load them using:
+\code{.cpp}
+// Load the source from external file
+ocls::CLSSource* source = framework.getSourceLoader().loadFromFile("/path/to/source.cls");
+\endcode
+A single source file or string can contain several functions, structures and constant variables. The source is compiled on runtime as C98 with the extensions available on your OpenCL device (such as vector types float2, float4 etc). The framework will also include header.cl with additional domain specific functionallity.
+
+The functions are executed on every cell in the domain, to help the programmer keep track of which cell is being processed, two global variables are defined,
+\code{.c}
+float3 pos;
+uint3 cell;
+\endcode
+\a pos represents the physical x, y and z position of the cell and \a cell represents the x, y and z index of the current cell to be processed.
+
+We can use this to create a source file for initializing a dataset with a gaussian curve.
+
+In external source:
+\code{.c}
+float top = 10.0;      //< top of gaussian func
+float bottom = 1.0;    //< bottom of gaussian func
+
+float gauss(float x, float b, float c){
+    return (((x-b)*(x-b))/2.0f*c*c);
+}
+
+float gaussian(void){
+    float val = gauss(pos.x,0.0f,2.5f);
+    return ((top-bottom))*exp(-val)+(bottom);
+}
+\endcode
+
+In c++:
+\code{.cpp}
+// Load the source from external file
+CLSSource* source = framework.getSourceLoader().loadFromFile("/path/to/source.cls");
+ocls::Data* q = framework.createData(domain, "q", source->getFunction("gaussian"));
+\endcode
+
+\subsection callable_func Callable Functions
+To manipulate the dataset, new fuctions must be defined. 
+ - ocls::Framework::createBoundaryFunction
+	- Runs on every ghost cell
+ - ocls::Framework::createFluxFunction
+	- Runs on every cell edge
+ - ocls::Framework::createIntegratorFunction
+	- Runs on every inner-domain cell
+
+They are created in a similar manner to the ininitialize function
+\code{.cpp}
+// Load the source from external file
+ocls::CLSSource* source = framework.getSourceLoader().loadFromFile("/path/to/source.cls");
+
+// Create functions
+ocls::BoundaryFunction on_bounds = framework.createBoundaryFunction(domain, source->getFunction("on_bounds"));
+ocls::FluxFunction lax_friedrichs = framework.createFluxFunction(domain, source->getFunction("lax_friedrichs"));
+ocls::IntegratorFunction forward_euler = framework.createIntegratorFunction(domain, source->getFunction("forward_euler"));
+\endcode
+
+Where each function string is a reference to a function defined in the source file.
+\code{.c}
+// Fixed boundary condition, assign 0.0f to every ghost cell 
+void on_bounds(float* q){
+	store(q, 0.0f, cell.x);
+}
+
+// Burger's equation flux
+float flux(float q){
+	return 0.5f*q*q;
+}
+
+// Numerical flux function
+float lax_friedrichs(float* q){
+	// Fetch stencil	
+	float q_i 	= fetch(q, cell.x);
+	float q_i1 	= fetch(q, cell.x, 1);
+
+	return 0.5f*(flux(q_i)+flux(q_i1));
+}
+
+// Integrator function
+float forward_euler(float* q, float* f, dt, dx){
+	// Fetch q from previous timestep	
+	float q_i 	= fetch(q, cell.x);
+
+	// Fetch f at cell edges
+	float f_p 	= fetch(f, cell.x);
+	float f_m 	= fetch(f, cell.x, -1);
+	
+	return q_i - (dx/dt)*(f_p-f_m);
+}
+\endcode
+
+We can then call these functions in a loop
+\code{.cpp}
+float T = 1.0f;
+flaot t = 0.0f;
+float dt = 0.1f;
+float dx = domain.getDelta(ocls::Domain::Dim::X);
+
+while(T > t){
+	// Enforce boundary on q
+	on_bounds(q);
+	
+	// Compute numerical flux
+	ocls::Data* f = lax_friedrichs(q);
+	
+	// Integrate q
+	ocls::Data* q_1 = forward_euler(q, f, dt, dx);
+	
+	// store q_1 in q for next timestep
+	q->copy(q_1);
+
+	// ..
+	t += dt;
+}
+\endcode
+
+\subsection combined Complete Program
+Everything combined, our program would look like this:
+\code{.cpp}
+#include "Framework.h"
+
+int main(){
+	// Create an insance of the framework.
+	ocls::Framework framework;
+	
+	// Create a new 1D domain
+	ocls::Domain domain(1);
+
+	// Set the mesh refinement to 200 cells
+	domain.setMesh(200)
+
+	// Set the physical bounds of the domain (values at edge cells.)
+	domain.setBounds(-1.0f,1.0f); 
+
+	// Set the number of ghost cell our algorithm requires.
+	domain.setGhostCells(1);
+
+	// Load source
+	ocls::CLSSource* source = framework.getSourceLoader().loadFromFile("/path/to/source.cls"); 
+
+	// Create initial data
+	ocls::Data* q = framework.createData(domain, "q", source->getFunction("gaussian"));	
+
+	// Create compute functions
+	ocls::BoundaryFunction on_bounds = framework.createBoundaryFunction(domain, source->getFunction("on_bounds"));
+	ocls::FluxFunction lax_friedrichs = framework.createFluxFunction(domain, source->getFunction("lax_friedrichs"));
+	ocls::IntegratorFunction forward_euler = framework.createIntegratorFunction(domain, source->getFunction("forward_euler"));	
+
+	// Define simulation variables
+	float T = 1.0f;
+	flaot t = 0.0f;
+	float dt = 0.1f;
+	float dx = domain.getDelta(ocls::Domain::Dim::X);
+
+	while(T > t){
+		// Enforce boundary on q
+		on_bounds(q);
+	
+		// Compute numerical flux
+		ocls::Data* f = lax_friedrichs(q);
+	
+		// Integrate q
+		ocls::Data* q_1 = forward_euler(q, f, dt, dx);
+	
+		// store q_1 in q for next timestep
+		q->copy(q_1);
+
+		// ..
+		t += dt;
+	}
+
+	// ...
+	return 0; 
+}
+\endcode
+And a source file like this:
+\code{.c}
+float top = 10.0;      //< top of gaussian func
+float bottom = 1.0;    //< bottom of gaussian func
+
+float gauss(float x, float b, float c){
+    return (((x-b)*(x-b))/2.0f*c*c);
+}
+
+float gaussian(void){
+    float val = gauss(pos.x,0.0f,2.5f);
+    return ((top-bottom))*exp(-val)+(bottom);
+}
+
+// Fixed boundary condition, assign 0.0f to every ghost cell 
+void on_bounds(float* q){
+	store(q, 0.0f, cell.x);
+}
+
+// Burger's equation flux
+float flux(float q){
+	return 0.5f*q*q;
+}
+
+// Numerical flux function
+float lax_friedrichs(float* q){
+	// Fetch stencil	
+	float q_i 	= fetch(q, cell.x);
+	float q_i1 	= fetch(q, cell.x, 1);
+
+	return 0.5f*(flux(q_i)+flux(q_i1));
+}
+
+// Integrator function
+float forward_euler(float* q, float* f, dt, dx){
+	// Fetch q from previous timestep	
+	float q_i 	= fetch(q, cell.x);
+
+	// Fetch f at cell edges
+	float f_p 	= fetch(f, cell.x);
+	float f_m 	= fetch(f, cell.x, -1);
+	
+	return q_i - (dx/dt)*(f_p-f_m);
+}
+\endcode
+ *
+ * \section examples_sec Examples
+- Burger
+- Shallow-Water
+- Euler
+- ...
+ */
