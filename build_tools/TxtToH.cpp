@@ -1,27 +1,23 @@
-/*****************************************************************************/
-/*                                                                           */
-/*                                                                           */
-/* (c) Copyright 2010, 2011, 2012 by                                         */
-/*     SINTEF, Oslo, Norway                                                  */
-/*     All rights reserved.                                                  */
-/*                                                                           */
-/*  THIS SOFTWARE IS FURNISHED UNDER A LICENSE AND MAY BE USED AND COPIED    */
-/*  ONLY IN  ACCORDANCE WITH  THE  TERMS  OF  SUCH  LICENSE  AND WITH THE    */
-/*  INCLUSION OF THE ABOVE COPYRIGHT NOTICE. THIS SOFTWARE OR  ANY  OTHER    */
-/*  COPIES THEREOF MAY NOT BE PROVIDED OR OTHERWISE MADE AVAILABLE TO ANY    */
-/*  OTHER PERSON.  NO TITLE TO AND OWNERSHIP OF  THE  SOFTWARE IS  HEREBY    */
-/*  TRANSFERRED.                                                             */
-/*                                                                           */
-/*  SINTEF  MAKES NO WARRANTY  OF  ANY KIND WITH REGARD TO THIS SOFTWARE,    */
-/*  INCLUDING,   BUT   NOT   LIMITED   TO,  THE  IMPLIED   WARRANTIES  OF    */
-/*  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.                    */
-/*                                                                           */
-/*  SINTEF SHALL NOT BE  LIABLE  FOR  ERRORS  CONTAINED HEREIN OR DIRECT,    */
-/*  SPECIAL,  INCIDENTAL  OR  CONSEQUENTIAL  DAMAGES  IN  CONNECTION WITH    */
-/*  FURNISHING, PERFORMANCE, OR USE OF THIS MATERIAL.                        */
-/*                                                                           */
-/*                                                                           */
-/*****************************************************************************/
+/**
+  *  This file is part of the OpenCL-ConsLaws framework
+  *  Copyright (C) 2010, 2011, 2012, 2015 SINTEF, Oslo, Norway.
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation, either version 3 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  *
+  */
+
+
 
 #include <iostream>
 #include <fstream>
