@@ -1,5 +1,6 @@
 /**
   *  This file is part of the OpenCL-ConsLaws framework
+  *  Copyright (C) 2010 - 2013 André R. Brodtkorb
   *  Copyright (C) 2014, 2015 Jens Kristoffer Reitan Markussen
   *
   * This program is free software: you can redistribute it and/or modify
