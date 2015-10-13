@@ -98,7 +98,7 @@ void   store5(__global float** array, float5 value, uint cell){
     store5_offset(array, value, cell, 0);
 }
 
-void   store6(__global float** array, float5 value, uint cell){
+void   store6(__global float** array, float6 value, uint cell){
     store6_offset(array, value, cell, 0);
 }
 
@@ -282,7 +282,7 @@ float4  fetch4(__global float** array, uint2 cell){
 float5  fetch5(__global float** array, uint2 cell){
     return fetch5_offset(array, cell, (int2)(0,0));
 }
-float5  fetch6(__global float** array, uint2 cell){
+float6  fetch6(__global float** array, uint2 cell){
     return fetch6_offset(array, cell, (int2)(0,0));
 }
 float8  fetch8(__global float** array, uint2 cell){
@@ -649,5 +649,32 @@ float6 fetch6_mirror(__global float** array, uint3 cell){
 #endif
 
 /**
- * Custrom functions
+ * Custom functions
  */
+float6 __OVERLOADABLE__ sign(float6 data) {
+  return (float6)(sign(data.s0),
+		  sign(data.s1),
+		  sign(data.s2),
+		  sign(data.s3),
+		  sign(data.s4),
+		  sign(data.s5));
+}
+
+float6 __OVERLOADABLE__ fabs(float6 data) {
+  return (float6)(fabs(data.s0),
+		  fabs(data.s1),
+		  fabs(data.s2),
+		  fabs(data.s3),
+		  fabs(data.s4),
+		  fabs(data.s5));
+}
+
+float6 __OVERLOADABLE__ min(float6 v1, float6 v2) {
+  // TODO: check if we should return the smallest vector, or the smallest elements in each vector.
+  return (float6)(min(v1.s0, v2.s0),
+		  min(v1.s1, v2.s1),
+		  min(v1.s2, v2.s2),
+		  min(v1.s3, v2.s3),
+		  min(v1.s4, v2.s4),
+		  min(v1.s5, v2.s5));
+}

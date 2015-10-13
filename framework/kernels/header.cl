@@ -325,7 +325,7 @@ float2  fetch2_offset(__global float** array, uint2 cell, int2 offset);
 float3  fetch3_offset(__global float** array, uint2 cell, int2 offset);
 float4  fetch4_offset(__global float** array, uint2 cell, int2 offset);
 float5  fetch5_offset(__global float** array, uint2 cell, int2 offset);
-float5  fetch6_offset(__global float** array, uint2 cell, int2 offset);
+float6  fetch6_offset(__global float** array, uint2 cell, int2 offset);
 float8  fetch8_offset(__global float** array, uint2 cell, int2 offset);
 void   store_offset(__global float* array, float value, uint2 cell, int2 offset);
 void   store2_offset(__global float** array, float2 value, uint2 cell, int2 offset);
@@ -408,6 +408,7 @@ float minmodABC(float a, float b, float c);
 float2 minmodABC2(float2 a, float2 b, float2 c);
 float3 minmodABC3(float3 a, float3 b, float3 c);
 float4 minmodABC4(float4 a, float4 b, float4 c);
+float6 minmodABC6(float6 a, float6 b, float6 c);
 
 /**
 * Maxmod function with two parameters
@@ -689,3 +690,19 @@ void cubic4(__global float** data, uint3 cell, integration_points4* out);
 /**
  * Custom functions
  */
+
+/**
+ * Custom sign function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ sign(float6 data);
+
+/**
+ * Custom fabs function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ fabs(float6 data);
+
+/**
+ * Custom min function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ min(float6 v1, float6 v2);
+
