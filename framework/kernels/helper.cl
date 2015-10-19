@@ -670,7 +670,6 @@ float6 __OVERLOADABLE__ fabs(float6 data) {
 }
 
 float6 __OVERLOADABLE__ min(float6 v1, float6 v2) {
-  // TODO: check if we should return the smallest vector, or the smallest elements in each vector.
   return (float6)(min(v1.s0, v2.s0),
 		  min(v1.s1, v2.s1),
 		  min(v1.s2, v2.s2),
