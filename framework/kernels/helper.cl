@@ -71,6 +71,10 @@ float5  fetch5(__global float** array, uint cell){
     return fetch5_offset(array, cell, 0);
 }
 
+float6  fetch6(__global float** array, uint cell){
+    return fetch6_offset(array, cell, 0);
+}
+
 float8  fetch8(__global float** array, uint cell){
     return fetch8_offset(array, cell, 0);
 }
@@ -92,6 +96,10 @@ void   store4(__global float** array, float4 value, uint cell){
 
 void   store5(__global float** array, float5 value, uint cell){
     store5_offset(array, value, cell, 0);
+}
+
+void   store6(__global float** array, float6 value, uint cell){
+    store6_offset(array, value, cell, 0);
 }
 
 void   store8(__global float** array, float8 value, uint cell){
@@ -130,6 +138,16 @@ float5  fetch5_offset(__global float** array, uint cell, int offset){
                     array[2][index],
                     array[3][index],
                     array[4][index]);
+}
+
+float6  fetch6_offset(__global float** array, uint cell, int offset){
+    size_t index = get_index(cell,offset);
+    return (float6)(array[0][index],
+                    array[1][index],
+                    array[2][index],
+                    array[3][index],
+                    array[4][index],
+		    array[5][index]);
 }
 
 float8  fetch8_offset(__global float** array, uint cell, int offset){
@@ -176,6 +194,16 @@ void   store5_offset(__global float** array, float5 value, uint cell, int offset
     array[2][index] = value.s2;
     array[3][index] = value.s3;
     array[4][index] = value.s4;
+}
+
+void   store6_offset(__global float** array, float6 value, uint cell, int offset){
+    size_t index = get_index(cell,offset);
+    array[0][index] = value.s0;
+    array[1][index] = value.s1;
+    array[2][index] = value.s2;
+    array[3][index] = value.s3;
+    array[4][index] = value.s4;
+    array[5][index] = value.s5;
 }
 
 void   store8_offset(__global float** array, float8 value, uint cell, int offset){
@@ -254,6 +282,9 @@ float4  fetch4(__global float** array, uint2 cell){
 float5  fetch5(__global float** array, uint2 cell){
     return fetch5_offset(array, cell, (int2)(0,0));
 }
+float6  fetch6(__global float** array, uint2 cell){
+    return fetch6_offset(array, cell, (int2)(0,0));
+}
 float8  fetch8(__global float** array, uint2 cell){
     return fetch8_offset(array, cell, (int2)(0,0));
 }
@@ -272,6 +303,9 @@ void   store4(__global float** array, float4 value, uint2 cell){
 }
 void   store5(__global float** array, float5 value, uint2 cell){
     store5_offset(array, value, cell, (int2)(0,0));
+}
+void   store6(__global float** array, float6 value, uint2 cell){
+    store6_offset(array, value, cell, (int2)(0,0));
 }
 void   store8(__global float** array, float8 value, uint2 cell){
     store8_offset(array, value, cell, (int2)(0,0));
@@ -305,6 +339,15 @@ float5  fetch5_offset(__global float** array, uint2 cell, int2 offset){
                     array[2][index],
                     array[3][index],
                     array[4][index]);
+}
+float6  fetch6_offset(__global float** array, uint2 cell, int2 offset){
+    size_t index = get_index(cell,offset);
+    return (float6)(array[0][index],
+                    array[1][index],
+                    array[2][index],
+                    array[3][index],
+                    array[4][index],
+		    array[5][index]);
 }
 float8  fetch8_offset(__global float** array, uint2 cell, int2 offset){
     size_t index = get_index(cell,offset);
@@ -351,6 +394,16 @@ void   store5_offset(__global float** array, float5 value, uint2 cell, int2 offs
     array[4][index] = value.s4;
 }
 
+void   store6_offset(__global float** array, float6 value, uint2 cell, int2 offset){
+    size_t index = get_index(cell,offset);
+    array[0][index] = value.s0;
+    array[1][index] = value.s1;
+    array[2][index] = value.s2;
+    array[3][index] = value.s3;
+    array[4][index] = value.s4;
+    array[5][index] = value.s5;
+}
+
 void   store8_offset(__global float** array, float8 value, uint2 cell, int2 offset){
     size_t index = get_index(cell,offset);
     array[0][index] = value.s0;
@@ -374,6 +427,12 @@ float3 fetch3_mirror(__global float** array, uint2 cell){
 }
 float4 fetch4_mirror(__global float** array, uint2 cell){
     return fetch4_offset(array, cell, get_mirror_cell_offset(cell));
+}
+float5 fetch5_mirror(__global float** array, uint2 cell){
+    return fetch5_offset(array, cell, get_mirror_cell_offset(cell));
+}
+float6 fetch6_mirror(__global float** array, uint2 cell){
+    return fetch6_offset(array, cell, get_mirror_cell_offset(cell));
 }
 
 #elif (_DIMENSIONS_ == 3)
@@ -434,6 +493,9 @@ float4  fetch4(__global float** array, uint3 cell){
 float5  fetch5(__global float** array, uint3 cell){
     return fetch5_offset(array, cell, (int3)(0,0,0));
 }
+float6  fetch6(__global float** array, uint3 cell){
+    return fetch6_offset(array, cell, (int3)(0,0,0));
+}
 float8  fetch8(__global float** array, uint3 cell){
     return fetch8_offset(array, cell, (int3)(0,0,0));
 }
@@ -452,6 +514,9 @@ void   store4(__global float** array, float4 value, uint3 cell){
 }
 void   store5(__global float** array, float5 value, uint3 cell){
     store5_offset(array, value, cell,(int3)(0,0,0));
+}
+void   store6(__global float** array, float6 value, uint3 cell){
+    store6_offset(array, value, cell,(int3)(0,0,0));
 }
 void   store8(__global float** array, float8 value, uint3 cell){
     store8_offset(array, value, cell,(int3)(0,0,0));
@@ -485,6 +550,15 @@ float5  fetch5_offset(__global float** array, uint3 cell, int3 offset){
                     array[2][index],
                     array[3][index],
                     array[4][index]);
+}
+float6  fetch6_offset(__global float** array, uint3 cell, int3 offset){
+    size_t index = get_index(cell,offset);
+    return (float6)(array[0][index],
+                    array[1][index],
+                    array[2][index],
+                    array[3][index],
+                    array[4][index],
+		    array[5][index]);
 }
 float8  fetch8_offset(__global float** array, uint3 cell, int3 offset){
     size_t index = get_index(cell,offset);
@@ -531,6 +605,16 @@ void   store5_offset(__global float** array, float5 value, uint3 cell, int3 offs
     array[4][index] = value.s4;
 }
 
+void   store6_offset(__global float** array, float6 value, uint3 cell, int3 offset) {
+    size_t index = get_index(cell,offset);
+    array[0][index] = value.s0;
+    array[1][index] = value.s1;
+    array[2][index] = value.s2;
+    array[3][index] = value.s3;
+    array[4][index] = value.s4;
+    array[5][index] = value.s5;
+}
+
 void   store8_offset(__global float** array, float8 value, uint3 cell, int3 offset){
     size_t index = get_index(cell,offset);
     array[0][index] = value.s0;
@@ -555,9 +639,41 @@ float3 fetch3_mirror(__global float** array, uint3 cell){
 float4 fetch4_mirror(__global float** array, uint3 cell){
     return fetch4_offset(array, cell, get_mirror_cell_offset(cell));
 }
+float5 fetch5_mirror(__global float** array, uint3 cell){
+    return fetch5_offset(array, cell, get_mirror_cell_offset(cell));
+}
+float6 fetch6_mirror(__global float** array, uint3 cell){
+    return fetch6_offset(array, cell, get_mirror_cell_offset(cell));
+}
 
 #endif
 
 /**
- * Custrom functions
+ * Custom functions
  */
+float6 __OVERLOADABLE__ sign(float6 data) {
+  return (float6)(sign(data.s0),
+		  sign(data.s1),
+		  sign(data.s2),
+		  sign(data.s3),
+		  sign(data.s4),
+		  sign(data.s5));
+}
+
+float6 __OVERLOADABLE__ fabs(float6 data) {
+  return (float6)(fabs(data.s0),
+		  fabs(data.s1),
+		  fabs(data.s2),
+		  fabs(data.s3),
+		  fabs(data.s4),
+		  fabs(data.s5));
+}
+
+float6 __OVERLOADABLE__ min(float6 v1, float6 v2) {
+  return (float6)(min(v1.s0, v2.s0),
+		  min(v1.s1, v2.s1),
+		  min(v1.s2, v2.s2),
+		  min(v1.s3, v2.s3),
+		  min(v1.s4, v2.s4),
+		  min(v1.s5, v2.s5));
+}

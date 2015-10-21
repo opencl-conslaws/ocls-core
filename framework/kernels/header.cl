@@ -168,6 +168,11 @@ float5  fetch5(__global float** array, uint cell);
 /**
 * Fetch the value at a cell
 */
+float6  fetch6(__global float** array, uint cell);
+
+/**
+* Fetch the value at a cell
+*/
 float8  fetch8(__global float** array, uint cell);
 
 /**
@@ -194,6 +199,11 @@ void   store4(__global float** array, float4 value, uint cell);
 * Store a value at a cell number
 */
 void   store5(__global float** array, float5 value, uint cell);
+
+/**
+* Store a value at a cell number
+*/
+void   store6(__global float** array, float6 value, uint cell);
 
 /**
 * Store a value at a cell number
@@ -228,6 +238,11 @@ float5  fetch5_offset(__global float** array, uint cell, int offset);
 /**
 * Fetch with an offset
 */
+float6  fetch6_offset(__global float** array, uint cell, int offset);
+
+/**
+* Fetch with an offset
+*/
 float8  fetch8_offset(__global float** array, uint cell, int offset);
 
 /**
@@ -254,6 +269,11 @@ void   store4_offset(__global float** array, float4 value, uint cell, int offset
 * Store with an offset
 */
 void   store5_offset(__global float** array, float5 value, uint cell, int offset);
+
+/**
+* Store with an offset
+*/
+void   store6_offset(__global float** array, float6 value, uint cell, int offset);
 
 /**
 * Store with an offset
@@ -291,29 +311,35 @@ float2  fetch2(__global float** array, uint2 cell);
 float3  fetch3(__global float** array, uint2 cell);
 float4  fetch4(__global float** array, uint2 cell);
 float5  fetch5(__global float** array, uint2 cell);
+float6  fetch6(__global float** array, uint2 cell);
 float8  fetch8(__global float** array, uint2 cell);
 void   store(__global float* array, float value, uint2 cell);
 void   store2(__global float** array, float2 value, uint2 cell);
 void   store3(__global float** array, float3 value, uint2 cell);
 void   store4(__global float** array, float4 value, uint2 cell);
 void   store5(__global float** array, float5 value, uint2 cell);
+void   store6(__global float** array, float6 value, uint2 cell);
 void   store8(__global float** array, float8 value, uint2 cell);
 float  fetch_offset(__global float* array, uint2 cell, int2 offset);
 float2  fetch2_offset(__global float** array, uint2 cell, int2 offset);
 float3  fetch3_offset(__global float** array, uint2 cell, int2 offset);
 float4  fetch4_offset(__global float** array, uint2 cell, int2 offset);
 float5  fetch5_offset(__global float** array, uint2 cell, int2 offset);
+float6  fetch6_offset(__global float** array, uint2 cell, int2 offset);
 float8  fetch8_offset(__global float** array, uint2 cell, int2 offset);
 void   store_offset(__global float* array, float value, uint2 cell, int2 offset);
 void   store2_offset(__global float** array, float2 value, uint2 cell, int2 offset);
 void   store3_offset(__global float** array, float3 value, uint2 cell, int2 offset);
 void   store4_offset(__global float** array, float4 value, uint2 cell, int2 offset);
 void   store5_offset(__global float** array, float5 value, uint2 cell, int2 offset);
+void   store6_offset(__global float** array, float6 value, uint2 cell, int2 offset);
 void   store8_offset(__global float** array, float8 value, uint2 cell, int2 offset);
 float fetch_mirror(__global float* array, uint2 cell);
 float2 fetch2_mirror(__global float** array, uint2 cell);
 float3 fetch3_mirror(__global float** array, uint2 cell);
 float4 fetch4_mirror(__global float** array, uint2 cell);
+float5 fetch5_mirror(__global float** array, uint2 cell);
+float6 fetch6_mirror(__global float** array, uint2 cell);
 
 #elif (_DIMENSIONS_ == 3)
 size_t get_index(uint3 cell, int3 offset);
@@ -324,29 +350,35 @@ float2  fetch2(__global float** array, uint3 cell);
 float3  fetch3(__global float** array, uint3 cell);
 float4  fetch4(__global float** array, uint3 cell);
 float5  fetch5(__global float** array, uint3 cell);
+float6  fetch6(__global float** array, uint3 cell);
 float8  fetch8(__global float** array, uint3 cell);
 void   store(__global float* array, float value, uint3 cell);
 void   store2(__global float** array, float2 value, uint3 cell);
 void   store3(__global float** array, float3 value, uint3 cell);
 void   store4(__global float** array, float4 value, uint3 cell);
 void   store5(__global float** array, float5 value, uint3 cell);
+void   store6(__global float** array, float6 value, uint3 cell);
 void   store8(__global float** array, float8 value, uint3 cell);
 float  fetch_offset(__global float* array, uint3 cell, int3 offset);
 float2  fetch2_offset(__global float** array, uint3 cell, int3 offset);
 float3  fetch3_offset(__global float** array, uint3 cell, int3 offset);
 float4  fetch4_offset(__global float** array, uint3 cell, int3 offset);
 float5  fetch5_offset(__global float** array, uint3 cell, int3 offset);
+float6  fetch6_offset(__global float** array, uint3 cell, int3 offset);
 float8  fetch8_offset(__global float** array, uint3 cell, int3 offset);
 void   store_offset(__global float* array, float value, uint3 cell, int3 offset);
 void   store2_offset(__global float** array, float2 value, uint3 cell, int3 offset);
 void   store3_offset(__global float** array, float3 value, uint3 cell, int3 offset);
 void   store4_offset(__global float** array, float4 value, uint3 cell, int3 offset);
 void   store5_offset(__global float** array, float5 value, uint3 cell, int3 offset);
+void   store6_offset(__global float** array, float6 value, uint3 cell, int3 offset);
 void   store8_offset(__global float** array, float8 value, uint3 cell, int3 offset);
 float fetch_mirror(__global float* array, uint3 cell);
 float2 fetch2_mirror(__global float** array, uint3 cell);
 float3 fetch3_mirror(__global float** array, uint3 cell);
 float4 fetch4_mirror(__global float** array, uint3 cell);
+float5 fetch5_mirror(__global float** array, uint3 cell);
+float6 fetch6_mirror(__global float** array, uint3 cell);
 
 #endif
 
@@ -376,6 +408,7 @@ float minmodABC(float a, float b, float c);
 float2 minmodABC2(float2 a, float2 b, float2 c);
 float3 minmodABC3(float3 a, float3 b, float3 c);
 float4 minmodABC4(float4 a, float4 b, float4 c);
+float6 minmodABC6(float6 a, float6 b, float6 c);
 
 /**
 * Maxmod function with two parameters
@@ -657,3 +690,19 @@ void cubic4(__global float** data, uint3 cell, integration_points4* out);
 /**
  * Custom functions
  */
+
+/**
+ * Custom sign function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ sign(float6 data);
+
+/**
+ * Custom fabs function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ fabs(float6 data);
+
+/**
+ * Custom min function for vectors with 6 elements
+ */
+float6 __OVERLOADABLE__ min(float6 v1, float6 v2);
+

@@ -67,6 +67,13 @@ float4 minmodABC4(float4 a, float4 b, float4 c){
             *(sign(b) + sign(c))
             *min( min(fabs(a),fabs(b)), fabs(c) );
 }
+float6 minmodABC6(float6 a, float6 b, float6 c){
+    return 0.25f
+            *sign(a)
+            *(sign(a) + sign(b))
+            *(sign(b) + sign(c))
+            *min( min(fabs(a),fabs(b)), fabs(c) );
+}
 
 float maxmod(float a, float b){
     float res = max(fabs(a),fabs(b));
